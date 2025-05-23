@@ -1,0 +1,29 @@
+.menu-container{
+    color:rgb(237, 242, 239);
+  background-color: rgb(27, 60, 81);
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+    padding: 10px;
+    width: 15vw;
+}
+
+.menu-container input{
+    background-color:rgb(15, 40, 55);
+    color:white;
+   border:none;
+   padding: 10px;
+}
+.menu-container select{
+    background-color:rgb(15, 40, 55);
+    color:white;
+    padding: 10px;
+}
+input:focus{
+  outline: none;
+}
+
+select:focus{
+    outline:none;
+}
+

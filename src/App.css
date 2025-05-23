@@ -1,0 +1,27 @@
+ 
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: rgb(15, 40, 55);
+}
+
+.plinko-container{
+  display: flex;
+  flex-direction: column;
+}
+
+.header{
+  width:100%;
+  box-shadow: 0 3px 3px rgb(13, 29, 38);
+  color:black;
+  text-align: center;
+}
+
+.game{
+  display: flex;
+  justify-content: center;
+  margin-top: 2%;
+  height: 70vh;
+   
+}     

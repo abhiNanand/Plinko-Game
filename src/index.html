@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Matter.js Reverse Gravity Example</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+      background: #fafafa;
+    }
+    #lottie{
+     width: 10%;
+     height: 10%;
+    }
+  </style>
+</head>
+<body>
+    <div id="lottie" ></div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.5/lottie.min.js"></script>
+    <script>
+      lottie.loadAnimation({
+        container: document.getElementById('lottie'), // the dom element
+        renderer: 'svg', // or 'canvas'
+        loop: true,
+        autoplay: true,
+        animationData:  
+{
+    "v": "5.1.8",
+    "ip": 0.0,
+    "op": 60.0,
+    "fr": 30.0,
+    "w": 100.0,
+    "h": 100.0,
+    "nm": "S",
+    "assets": [],
+    "layers": [
+        {
+            "ind": 1,
+            "ty": 4,
+            "nm": "s",
+            "sr": 1.0,
+            "ks": {
+                "o": {
+                    "a": 0,
+                    "k": 100.0
+                },
+                "r": {
+                    "a": 0,
+                    "k": 0.0
+                },
+                "p": {
+                    "a": 0,
+                    "k": [
+                        50.0,
+                        50.0,
+                        0.0
+                    ]
+                },
+                "a": {
+                    "a": 0,
+                    "k": [
+                        160.0,
+                        284.0,
+                        0.0
+                    ]
+                },
+                "s": {
+                    "a": 0,
+                    "k": [
+                        100.0,
+                        100.0,
+                        100.0
+                    ]
+                }
+            },
+            "shapes": [
+                {
+                    "ty": "gr",
+                    "nm": "G",
+                    "it": [
+                        {
+                            "ty": "sh",
+                            "nm": "P",
+                            "ind": 0,
+                            "ks": {
+                                "k": {
+                                    "i": [
+                                        [
+                                            0,
+                                            19.812
+                                        ],
+                                        [
+                                            19.882,
+                                            0
+                                        ],
+                                        [
+                                            0,
+                                            -19.882
+                                        ],
+                                        [
+                                            -19.882,
+                                            0
+                                        ]
+                                    ],
+                                    "o": [
+                                        [
+                                            0,
+                                            -19.882
+                                        ],
+                                        [
+                                            -19.882,
+                                            0
+                                        ],
+                                        [
+                                            0,
+                                            19.882
+                                        ],
+                                        [
+                                            19.882,
+                                            0
+                                        ]
+                                    ],
+                                    "v": [
+                                        [
+                                            36,
+                                            0
+                                        ],
+                                        [
+                                            0,
+                                            -36
+                                        ],
+                                        [
+                                            -36,
+                                            0
+                                        ],
+                                        [
+                                            0,
+                                            36
+                                        ]
+                                    ],
+                                    "c": true
+                                },
+                                "a": 0
+                            }
+                        },
+                        {
+                            "ty": "tm",
+                            "nm": "T",
+                            "s": {
+                                "a": 1,
+                                "k": [
+                                    {
+                                        "i": {
+                                            "x": [
+                                                0.667
+                                            ],
+                                            "y": [
+                                                1.0
+                                            ]
+                                        },
+                                        "o": {
+                                            "x": [
+                                                0.167
+                                            ],
+                                            "y": [
+                                                0.167
+                                            ]
+                                        },
+                                        "t": 0.0,
+                                        "s": [
+                                            100.0
+                                        ],
+                                        "e": [
+                                            0.0
+                                        ]
+                                    },
+                                    {
+                                        "i": {
+                                            "x": [
+                                                0.833
+                                            ],
+                                            "y": [
+                                                1.0
+                                            ]
+                                        },
+                                        "o": {
+                                            "x": [
+                                                0.167
+                                            ],
+                                            "y": [
+                                                0.0
+                                            ]
+                                        },
+                                        "t": 29.0,
+                                        "s": [
+                                            0.0
+                                        ],
+                                        "e": [
+                                            0.0
+                                        ]
+                                    },
+                                    {
+                                        "t": 51.0
+                                    }
+                                ]
+                            },
+                            "e": {
+                                "a": 1,
+                                "k": [
+                                    {
+                                        "i": {
+                                            "x": [
+                                                0.833
+                                            ],
+                                            "y": [
+                                                0.833
+                                            ]
+                                        },
+                                        "o": {
+                                            "x": [
+                                                0.333
+                                            ],
+                                            "y": [
+                                                0.0
+                                            ]
+                                        },
+                                        "t": 20.0,
+                                        "s": [
+                                            100.0
+                                        ],
+                                        "e": [
+                                            1.0
+                                        ]
+                                    },
+                                    {
+                                        "t": 60.0
+                                    }
+                                ]
+                            },
+                            "o": {
+                                "a": 0,
+                                "k": 0.0
+                            },
+                            "m": 1
+                        },
+                        {
+                            "ty": "st",
+                            "nm": "S",
+                            "lc": 2,
+                            "lj": 1,
+                            "ml": 10.0,
+                            "o": {
+                                "a": 0,
+                                "k": 100.0
+                            },
+                            "w": {
+                                "a": 0,
+                                "k": 10.0
+                            },
+                            "c": {
+                                "a": 0,
+                                "k": [
+                                    0.0,
+                                    0.867,
+                                    0.702,
+                                    1.0
+                                ]
+                            }
+                        },
+                        {
+                            "ty": "tr",
+                            "o": {
+                                "a": 0,
+                                "k": 100.0
+                            },
+                            "r": {
+                                "a": 1,
+                                "k": [
+                                    {
+                                        "i": {
+                                            "x": [
+                                                0.667
+                                            ],
+                                            "y": [
+                                                1.0
+                                            ]
+                                        },
+                                        "o": {
+                                            "x": [
+                                                0.167
+                                            ],
+                                            "y": [
+                                                0.167
+                                            ]
+                                        },
+                                        "t": 0.0,
+                                        "s": [
+                                            -90.0
+                                        ],
+                                        "e": [
+                                            270.0
+                                        ]
+                                    },
+                                    {
+                                        "t": 59.0
+                                    }
+                                ]
+                            },
+                            "p": {
+                                "a": 0,
+                                "k": [
+                                    160.0,
+                                    284.0
+                                ]
+                            },
+                            "a": {
+                                "a": 0,
+                                "k": [
+                                    0.0,
+                                    0.0
+                                ]
+                            },
+                            "s": {
+                                "a": 0,
+                                "k": [
+                                    100.0,
+                                    100.0
+                                ]
+                            },
+                            "nm": "T",
+                            "sk": {
+                                "a": 0,
+                                "k": 0.0
+                            },
+                            "sa": {
+                                "a": 0,
+                                "k": 0.0
+                            }
+                        }
+                    ]
+                }
+            ],
+            "ip": 0.0,
+            "op": 60.0000024438501,
+            "st": 0.0
+        }
+    ],
+    "markers": []
+}
+      });
+    </script>
+  <!-- Matter.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/matter-js@0.19.0/build/matter.min.js"></script>
+  
+  <script>
+    var Example = Example || {};
+
+    Example.gravity = function() {
+        var Engine = Matter.Engine,
+            Render = Matter.Render,
+            Runner = Matter.Runner,
+            Composites = Matter.Composites,
+            Common = Matter.Common,
+            MouseConstraint = Matter.MouseConstraint,
+            Mouse = Matter.Mouse,
+            Composite = Matter.Composite,
+            Bodies = Matter.Bodies;
+
+        // create engine
+        var engine = Engine.create(),
+            world = engine.world;
+
+        // create renderer
+        var render = Render.create({
+            element: document.body,
+            engine: engine,
+            options: {
+                width: 800,
+                height: 600,
+                showVelocity: true,
+                showAngleIndicator: true
+            }
+        });
+
+        Render.run(render);
+
+        // create runner
+        var runner = Runner.create();
+        Runner.run(runner, engine);
+
+        // add walls
+        Composite.add(world, [
+            Bodies.rectangle(400, 0, 800, 50, { isStatic: true }),     // top
+            Bodies.rectangle(400, 600, 800, 50.5, { isStatic: true }), // bottom
+            Bodies.rectangle(800, 300, 50, 600, { isStatic: true }),   // right
+            Bodies.rectangle(0, 300, 50, 600, { isStatic: true })      // left
+        ]);
+
+        // reverse gravity: upwards
+        engine.gravity.y = -1;
+        
+        // create stack of shapes
+        var stack = Composites.stack(50, 120, 11, 5, 0, 0, function(x, y) {
+            switch (Math.round(Common.random(0, 1))) {
+            case 0:
+                if (Common.random() < 0.8) {
+                    return Bodies.rectangle(x, y, Common.random(20, 50), Common.random(20, 50));
+                } else {
+                    return Bodies.rectangle(x, y, Common.random(80, 120), Common.random(20, 30));
+                }
+            case 1:
+                return Bodies.polygon(x, y, Math.round(Common.random(1, 8)), Common.random(20, 50));
+            }
+        });
+        
+        Composite.add(world, stack);
+
+        // add mouse control to drag bodies
+        var mouse = Mouse.create(render.canvas),
+            mouseConstraint = MouseConstraint.create(engine, {
+                mouse: mouse,
+                constraint: {
+                    stiffness: 0.2,
+                    render: { visible: false }
+                }
+            });
+
+        Composite.add(world, mouseConstraint);
+
+        // keep the mouse in sync with rendering
+        render.mouse = mouse;
+
+        // fit the render viewport to the scene
+        Render.lookAt(render, {
+            min: { x: 0, y: 0 },
+            max: { x: 800, y: 600 }
+        });
+
+        return {
+            engine: engine,
+            runner: runner,
+            render: render,
+            canvas: render.canvas,
+            stop: function() {
+                Matter.Render.stop(render);
+                Matter.Runner.stop(runner);
+            }
+        };
+    };
+
+    // run example
+    Example.gravity();
+  </script>
+</body>
+</html>

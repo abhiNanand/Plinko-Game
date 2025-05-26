@@ -1,0 +1,122 @@
+✅ Why use requestAnimationFrame()?
+Because it:
+
+Creates smooth animations.
+Avoids choppy or laggy animations that you'd get with setInterval or setTimeout.
+It’s optimized by the browser to:
+Run 60 times per second (about every 16.67ms) depending on screen refresh rate.
+
+syntax: let id = requestAnimationFrame(callbackFunction);
+Returns an id so you can cancel it later with cancelAnimationFrame(id).
+
+Delta Time:
+It's the time difference between two frames, and it's used to make movements frame-rate independent.
+✅ Good (frame-independent using delta time):
+position.x += speed * deltaTime;
+Now it moves same distance per second, no matter the FPS.
+
+
+getContext:
+-----------
+If you write: getContext("2d")
+It returns a CanvasRenderingContext2D object.
+This object allows you to draw shapes, text, images, etc. on the canvas.
+
+============================================================================
+
+1.restitution basically means bounciness in physics simulations.
+2.
+  const engine = Matter.Engine.create();
+    const world = engine.world;
+
+    // create a circle body
+    const circle = Matter.Bodies.circle(100, 100, 30, { restitution: 0.8 });
+
+    // create a rectangle body
+    const box = Matter.Bodies.rectangle(200, 100, 80, 40);
+
+    // add bodies to the world
+    Matter.World.add(world, [circle, box]);
+
+    // run the engine
+    Matter.Engine.run(engine);
+
+3. What is Matter.Axes?
+In Matter.js, Matter.Axes is a helper module used internally for detecting collisions between shapes. It deals with axes, which are just directions (like lines or vectors) used to check if two shapes are overlapping or not.
+
+You normally don’t need to use this directly unless you're doing advanced custom collision detection.
+
+const axes = Matter.Axes.fromVertices([
+  { x: 0, y: 0 },
+  { x: 40, y: 0 },
+  { x: 20, y: 30 },
+]);
+
+
+What is Matter.js?
+Matter.js is a JavaScript library that helps you create realistic physics simulations in the browser.
+Why do we need Matter.js?
+If you want to build interactive animations or games where objects behave like in the real world — for example:
+
+A ball bouncing off walls
+
+Blocks stacking up without overlapping
+
+Objects sliding down slopes
+
+
+
+ 1. Render – Scene ko draw karne ke liye
+Iska kaam hota hai screen par objects dikhana.
+Yeh canvas banata hai aur usme ball, walls, pegs sab draw karta hai.
+const render = Render.create({
+  element: sceneRef.current,
+  engine: engine,
+  options: { ... }
+});
+Render.run(render);
+
+
+2. Runner – Physics engine ko chalane ke liye
+Iska kaam hota hai physics engine ko continuously chalu rakhna.
+Ye baar-baar check karta hai: kya ball giri? kis se takraya? kaha ruk gaya?
+const runner = Runner.create();
+Runner.run(runner, engine);
+
+3. Composite – Objects ko group karne ke liye
+Iska kaam hota hai multiple bodies ko ek group me jodna (world me daalna).
+Jaise: ball, walls, pegs — sabko ek jagah world me add karna.
+Composite.add(engine.world, [ball, ground, walls, pegs]);
+
+✅ 4. Bodies – Objects banane ke liye (Ball, Box, Circle, etc.)
+Iska kaam hota hai shapes banani — circle, rectangle, triangle, etc.
+Jaise ball banani ho, ya wall — Bodies.circle ya Bodies.rectangle se banta hai.
+const ball = Bodies.circle(x, y, radius, options);
+const wall = Bodies.rectangle(x, y, width, height, options);
+
+
+
+In the Matter.Render.create options, the wireframes property controls how the physics bodies are drawn.
+
+🔹 wireframes: true (default):
+Renders all objects as simple outlines (just lines and shapes).
+
+Ignores custom styles like fillStyle or strokeStyle.
+
+Useful for debugging because it shows the physics bodies exactly as the engine sees them.
+
+Faster to render.
+
+🔹 wireframes: false:
+Enables full rendering with colors, shadows, textures, and styles defined in the render options for each body.
+
+Example: if you set fillStyle: "#f35e66" for a ball, it will show up red.
+
+Needed if you want a custom or styled look, not a debug look.
+
+💡 In your code:
+ts
+Copy
+Edit
+wireframes: false,
+background: 'transparent',

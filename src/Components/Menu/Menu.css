@@ -8,6 +8,13 @@
     width: 15vw;
 }
 
+.amount-input{
+  background-color:rgb(15, 40, 55);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0  10px  0 0;
+}
 .menu-container input{
     background-color:rgb(15, 40, 55);
     color:white;

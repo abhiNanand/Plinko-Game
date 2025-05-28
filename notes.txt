@@ -120,3 +120,12 @@ Copy
 Edit
 wireframes: false,
 background: 'transparent',
+
+
+
+
+//28 May
+--------
+
+score wala part sahi karna hai.
+ui dynamic karna hai.

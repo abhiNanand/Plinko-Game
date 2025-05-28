@@ -5,7 +5,7 @@ export default function App() {
   return (
     <div className="plinko-container">
       <div className="header">
-<h1>Plinko</h1>
+      <h1>Plinko</h1>
       </div>
       <div className="game">
         <Menu />

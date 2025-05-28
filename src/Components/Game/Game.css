@@ -1,49 +1,24 @@
 .plinko-board {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width:100%;
+    width: 800px;
+    height: 600px;
+    background-color: rgb(14, 33, 46);
+    margin: auto;
+    position: relative;
   }
-  .plinko-row {
+  
+  .btn {
     display: flex;
     justify-content: center;
-    gap:20px;
-    margin:10px;
-  } 
-  .dot {
-    width: 10px;
-    height: 10px;
-    background-color: rgb(211, 207, 207);
-    border-radius: 50%;
-    margin: 0 8px;
-  }
-  .slots {
-    display: flex;
-    justify-content: center;
+    gap: 20px;
     margin-top: 16px;
-  
-  }
-  .slot {
-    margin: 0 4px;
-    background-color: rgb(169, 61, 28);
-    padding:10px;
-    border-radius: 5px;
   }
   
-  .bet-button{
-    margin-top:2%;
-    width:5vw;
-    background-color: rgb(35, 241, 172);
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;    
+  .bet-button {
+    padding: 10px 20px;
+    background-color: #e8b31d;
     border: none;
-    &:hover{
-        background-color: rgb(93, 152, 133);
-    }
-}
-
-
-
-
- 
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  

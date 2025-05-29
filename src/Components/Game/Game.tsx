@@ -1,26 +1,40 @@
 import { useEffect, useRef } from "react";
 import Matter from "matter-js";
-import { useSelector,useDispatch } from "react-redux";
-import {incrementTotalAmount,decrementTotalAmont,updateBetAmount} from '../../store/index';
+import { sound } from "../../assets";
+import { useSelector, useDispatch } from "react-redux";
+import { incrementTotalAmount, decrementTotalAmont,ballDropping } from '../../store/index';
 import "./Game.css";
+import { toast } from "react-toastify";
 
 export default function Game() {
   const rows = useSelector((state: any) => state.game.rows);
-  const betAmount = useSelector((state:any)=>state.game.amount);
+  const isBallDropping=useSelector((state:any)=>state.game.ballDropped);
+  const betAmount = useSelector((state: any) => state.game.amount);
+  const totalAmount = useSelector((state: any) => state.game.total)
   const betAmountRef = useRef(betAmount);
   const sceneRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef<Matter.Engine | null>(null);
   const renderRef = useRef<Matter.Render | null>(null);
    const dispatch = useDispatch();
 
+   const audio=new Audio(sound.bonus1);
+   const audio2=new Audio(sound.balldropped);
   const getRandomInt = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
   };
 
   const dropBall = () => {
+    audio2.play();
+
+    if (betAmount > totalAmount) {
+      toast.error("Bet amount higher than total amount");
+      console.log("error")
+      return;
+    }   
     const engine = engineRef.current;
     if (!engine) return;
-
+    if(betAmount!=0)
+    dispatch(ballDropping(true));
     const pegRadius = 8 - (rows - 8) * 0.6;
     const minX = 40 + pegRadius;
     const maxX = 760 - pegRadius;
@@ -44,9 +58,9 @@ export default function Game() {
     Matter.Composite.add(engine.world, ball);
   };
 
-  useEffect(()=>{
-    betAmountRef.current=betAmount;
-  },[betAmount])
+  useEffect(() => {
+    betAmountRef.current = betAmount;
+  }, [betAmount])
 
   useEffect(() => {
     const { Engine, Render, Runner, Composite, Bodies, Events } = Matter;
@@ -114,7 +128,7 @@ export default function Game() {
     const boxWidth = 800 / (rows + 1);
 
     for (let i = 0; i < rows + 1; i++) {
-      const multiplier = boxMultipliers[i%boxMultipliers.length];
+      const multiplier = boxMultipliers[i % boxMultipliers.length];
       const box = Bodies.rectangle(startX + boxWidth / 2, 550, boxWidth, 30, {
         isStatic: true,
         render: {
@@ -123,7 +137,7 @@ export default function Game() {
         },
         label: `box${i}`,
       });
-      (box as any).multiplier=multiplier;
+      (box as any).multiplier = multiplier;
       pointBoxes.push(box);
       startX += boxWidth;
     }
@@ -132,37 +146,31 @@ export default function Game() {
     const removedBalls = new Set();
     Events.on(engine, "collisionStart", (event) => {
       event.pairs.forEach((pair) => {
-         const [bodyA,bodyB]=[pair.bodyA, pair.bodyB];
-        const isBallA=bodyA.label === "ball";
-        const isBallB=bodyB.label === "ball";
-        const isBoxA=bodyA.label.startsWith("box");
-        const isBoxB=bodyB.label.startsWith("box");
-
-        if((isBallA && isBoxB) || (isBallB && isBoxA))
-        {
-          const ball= isBallA? bodyA:bodyB;
-          const box= isBoxA? bodyA:bodyB;
-
-          if(removedBalls.has(ball.id))
+        const [bodyA, bodyB] = [pair.bodyA, pair.bodyB];
+        const isBallA = bodyA.label === "ball";
+        const isBallB = bodyB.label === "ball";
+        const isBoxA = bodyA.label.startsWith("box");
+        const isBoxB = bodyB.label.startsWith("box");
+        if ((isBallA && isBoxB) || (isBallB && isBoxA)) {
+          const ball = isBallA ? bodyA : bodyB;
+          const box = isBoxA ? bodyA : bodyB;
+          if (removedBalls.has(ball.id))
             return;
           removedBalls.add(ball.id);
-
-          
-          const multiplier=(box as any).multiplier;
-          console.log(multiplier,betAmountRef.current , multiplier*betAmountRef.current);
-          const winAmount = Math.round(betAmountRef.current * multiplier);
-          if(betAmountRef.current<winAmount)
-          {
-            dispatch(incrementTotalAmount(winAmount-betAmountRef.current));
+          const multiplier = (box as any).multiplier;
+          console.log(multiplier, betAmountRef.current, multiplier * betAmountRef.current);
+          const winAmount = betAmountRef.current * multiplier;
+          if (betAmountRef.current < winAmount) {
+            dispatch(incrementTotalAmount(winAmount - betAmountRef.current));
           }
-          else if(betAmountRef.current>winAmount){
-            dispatch(decrementTotalAmont(betAmountRef.current-winAmount));
+          else if (betAmountRef.current > winAmount) {
+            dispatch(decrementTotalAmont(betAmountRef.current - winAmount));
           }
-          dispatch(updateBetAmount(winAmount));
+          dispatch(ballDropping(false));
           Composite.remove(engine.world, ball);
+          audio.play();
         }
       });
-
     });
 
     Render.run(render);
@@ -186,10 +194,10 @@ export default function Game() {
     <div>
       <div ref={sceneRef} className="plinko-board" />
       <div className="btn">
-        <button className="bet-button" onClick={dropBall}>
+        <button className="bet-button" onClick={dropBall} disabled={isBallDropping}>
           Drop Ball
         </button>
-       </div>
+      </div>
     </div>
   );
 }

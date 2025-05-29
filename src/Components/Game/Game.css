@@ -15,10 +15,14 @@
   
   .bet-button {
     padding: 10px 20px;
-    background-color: #e8b31d;
+    background-color:#68e81d;
     border: none;
     border-radius: 8px;
     font-weight: bold;
-    cursor: pointer;
+    cursor:pointer;
   }
   
+  button:disabled{
+    background-color:#48b30a;
+     color:black
+  }

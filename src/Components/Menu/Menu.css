@@ -29,8 +29,14 @@
 input:focus{
   outline: none;
 }
-
+  
 select:focus{
     outline:none;
 }
 
+input:disabled {
+  cursor: not-allowed;
+}  
+select:disabled{
+  cursor:not-allowed;
+}

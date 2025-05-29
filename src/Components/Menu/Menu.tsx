@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+ 
 import { updateBetAmount, updateRows } from '../../store';
 import { image } from '../../assets';
 import './Menu.css';
 export default function Menu() {
 
-    const betAmount = useSelector((state: any) => state.game.amount);
-    const [amount, setAmount] = useState<number | string>(0);
+     const [amount, setAmount] = useState<number | string>(0);
     const dispatch = useDispatch();
     const totalAmount = useSelector((state: any) => state.game.total);
+    const isBallDropping=useSelector((state:any)=>state.game.ballDropped);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = (e.target.value.replace(/^0+/, '')).trim();
         setAmount((value === '') ? '' : Number(value));
@@ -27,21 +28,27 @@ export default function Menu() {
         }
     }
 
-    useEffect(() => setAmount(betAmount), [betAmount]);
+ 
 
     return (
-        <div className="menu-container">
+      
+   
+         <div className="menu-container">
+           
             <label htmlFor="total-amount">Total Amount</label>
             <div className="amount-input">
                 <input id="total-amount" type="text" disabled value={`₹ ${totalAmount}`} />
                 <img src={image.rupeeIcon} height="18px" width="18px" alt="rupeeIcon" />
             </div>
             <label htmlFor="amount">Bet Amount</label>
-            <input id="amount" type="number" min="0" value={amount} onChange={handleChange} onBlur={handleBlur} />
+            <input id="amount" type="number" min="0" value={amount} onChange={handleChange} onBlur={handleBlur} disabled={isBallDropping}/>
             <label htmlFor="rows">Rows</label>
-            <select id="rows" onChange={(e) => dispatch(updateRows(Number(e.target.value)))}>
+            <select id="rows" onChange={(e) => dispatch(updateRows(Number(e.target.value)))} disabled={isBallDropping}>
                 {[...Array(9)].map((_, i) => (<option key={8 + i} >{8 + i}</option>))}
             </select>
+            
         </div>
+  
+       
     );
 }

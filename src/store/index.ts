@@ -4,12 +4,14 @@ interface Values {
   total: number;
   amount: number;
   rows: number;
+  ballDropped: boolean;
 }
 
 const initialState: Values = {
   total: 1000,
   amount: 0,
   rows: 8,
+  ballDropped:false,
 };
 
 const slice = createSlice({
@@ -28,10 +30,13 @@ const slice = createSlice({
     decrementTotalAmont(state,action:PayloadAction<number>) {
       state.total -=action.payload;
     },
+    ballDropping(state,action:PayloadAction<boolean>){
+      state.ballDropped=action.payload;
+    },
   },
 });
 
-export const {updateRows,incrementTotalAmount,decrementTotalAmont,updateBetAmount} = slice.actions;
+export const {updateRows,incrementTotalAmount,decrementTotalAmont,updateBetAmount,ballDropping} = slice.actions;
 export default slice.reducer;
 
  

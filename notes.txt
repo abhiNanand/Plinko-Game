@@ -126,6 +126,32 @@ background: 'transparent',
 
 //28 May
 --------
-
 score wala part sahi karna hai.
 ui dynamic karna hai.
+
+Matter.Events.on(object, eventName, callback);
+for collision
+Events.on(engine, "collisionStart", (event) => {
+pairs.forEach(pair => {
+    const bodyA = pair.bodyA;
+    const bodyB = pair.bodyB;
+
+    console.log('Collision detected between:', bodyA.label, 'and', bodyB.label);})})
+=========================================
+how to play sound in reactjs
+ ✅ Basic Idea
+🔊 1. Add a Sound File
+First, add a sound file to your project directory. Example:
+/public/sounds/collision.mp3
+Or place it somewhere inside your src and import it (if you're using a bundler like Vite, Webpack, etc.).
+🔊 2. Load the Audio in React
+ 
+const collisionSound = new Audio(collisionSoundFile);
+Or use the Web Audio API if you want more control.
+ 
+      collisionSound.currentTime = 0; // rewind to 0 second
+      collisionSound.play();
+ 
+=======================================
+ 
+ 

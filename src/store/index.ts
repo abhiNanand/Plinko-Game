@@ -16,11 +16,11 @@ const slice = createSlice({
   name: "game",
   initialState,
   reducers: {
-    updateAmount(state, action: PayloadAction<number>) {
-      state.amount = action.payload;
-    },
     updateRows(state, action: PayloadAction<number>) {
       state.rows = action.payload;
+    },
+    updateBetAmount(state,action:PayloadAction<number>){
+      state.amount=action.payload;
     },
     incrementTotalAmount(state,action:PayloadAction<number>) {
       state.total += action.payload;
@@ -31,7 +31,7 @@ const slice = createSlice({
   },
 });
 
-export const {updateAmount,updateRows} = slice.actions;
+export const {updateRows,incrementTotalAmount,decrementTotalAmont,updateBetAmount} = slice.actions;
 export default slice.reducer;
 
  

@@ -1,29 +1,34 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateAmount, updateRows } from '../../store';
+import { updateBetAmount, updateRows } from '../../store';
 import { image } from '../../assets';
 import './Menu.css';
 export default function Menu() {
 
+    const betAmount = useSelector((state: any) => state.game.amount);
     const [amount, setAmount] = useState<number | string>(0);
     const dispatch = useDispatch();
     const totalAmount = useSelector((state: any) => state.game.total);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = (e.target.value).trim();
+        const value = (e.target.value.replace(/^0+/, '')).trim();
         setAmount((value === '') ? '' : Number(value));
-        dispatch(updateAmount((value === '') ? 0 : Number(value)))
+        dispatch(updateBetAmount((value === '') ? 0 : Number(value)))
     }
     const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if ((e.target.value).trim() == '' || Number(e.target.value) < 0) { setAmount(0); dispatch(updateAmount(0)) }
+        if ((e.target.value).trim() == '' || Number(e.target.value) < 0) { setAmount(0); dispatch(updateBetAmount(0)) }
         else {
             if (Number(e.target.value) > totalAmount) {
                 setAmount(totalAmount);
                 return;
             }
-            setAmount(Number(e.target.value));
-            dispatch(updateAmount((Number(e.target.value))))
+            let value = e.target.value;
+            setAmount(Number(value));
+            dispatch(updateBetAmount((Number(value))))
         }
     }
+
+    useEffect(() => setAmount(betAmount), [betAmount]);
+
     return (
         <div className="menu-container">
             <label htmlFor="total-amount">Total Amount</label>

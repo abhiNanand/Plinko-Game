@@ -1,3 +1,4 @@
+
 import { useEffect, useRef,useState } from "react";
 import Matter from "matter-js";
 import { sound } from "../../assets";
@@ -53,9 +54,9 @@ export default function Game() {
     const ballRadius = 14 - (rows - 8) * 0.4;
 
     const ball = Matter.Bodies.circle(n, 0, ballRadius, {
-      restitution: 0.8,
-      friction: 1,
-      render: { fillStyle: "#e8b31d" },
+      restitution: 0.4,
+      friction: 0,
+      render: { fillStyle: "#c95555" },
       label: "ball",
     });
     Matter.Composite.add(engine.world, ball);
@@ -78,14 +79,7 @@ export default function Game() {
     });
     renderRef.current = render;
 
-    const leftWall = Bodies.rectangle(0, 300, 40, 600, {
-      isStatic: true,
-      render: { fillStyle: "#0E212E" },
-    });
-    const rightWall = Bodies.rectangle(800, 300, 40, 600, {
-      isStatic: true,
-      render: { fillStyle: "#0E212E" },
-    });
+
 
 
     const canvasHeight = 600;
@@ -100,6 +94,8 @@ export default function Game() {
     const pegs: Matter.Body[] = [];
     const boxMultipliers = points[rows-8];
 
+    let startpat=0;
+    let endpat=0;
     for (let r = 0; r < rows; r++) {
       const pegCount = r + 3;
       const totalWidth = (pegCount - 1) * spacingX;
@@ -112,25 +108,48 @@ export default function Game() {
 
         x = Math.max(minX, Math.min(maxX, x));
         const y = 60 + r * spacingY;
+       
+          if(r+1===rows && col===0)
+            startpat=x;
+          if(r+1===rows && col+1===pegCount)
+            endpat=x+pegRadius;
 
         const peg = Bodies.circle(x, y, pegRadius, {
           isStatic: true,
-          friction: 0.4,
+          friction: 0,
           render: { fillStyle: "white" },
         });
         pegs.push(peg);
       }
     }
-    const pointBoxes: Matter.Body[] = [];
-    let startX = 0;
 
-    const boxWidth = 800 / (rows + 1);
-    const labels: {x:number; multiplier: number}[] =[];
 
+
+    const leftWall = Bodies.rectangle(startpat-30, 300, 40, 600, {
+      isStatic: true,
+      render: { fillStyle: "#0E212E" },
+    });
+    const rightWall = Bodies.rectangle(endpat+30, 300, 40, 600, {
+      isStatic: true,
+      render: { fillStyle: "#0E212E" },
+    });
+
+     const pointBoxes: Matter.Body[] = [];
+    const labels: {x: number; multiplier: number}[] = [];
+    
+     const totalAvailableWidth = endpat - startpat;
+    
+     const gapSize = pegRadius;
+    
+     const boxWidth = (totalAvailableWidth - (gapSize * rows)) / (rows + 1);
+    
+    let currentX = startpat;
+    
     for (let i = 0; i < rows + 1; i++) {
       const multiplier = boxMultipliers[i];
-      const centerX =  startX + boxWidth/2;
-      const box = Bodies.rectangle(startX + boxWidth / 2, 550, boxWidth, 30, {
+      const centerX = currentX + boxWidth / 2;
+      
+      const box = Bodies.rectangle(centerX, 550, boxWidth, 30, {
         isStatic: true,
         render: {
           fillStyle: "#d68d06",
@@ -138,10 +157,12 @@ export default function Game() {
         },
         label: `box${i}`,
       });
+    
       (box as any).multiplier = multiplier;
       pointBoxes.push(box);
-      labels.push({x:centerX,multiplier});
-      startX += boxWidth;
+      labels.push({x: centerX, multiplier});
+      
+       currentX += boxWidth + gapSize;
     }
     setBoxLabels(labels);
    Composite.add(engine.world, [...pointBoxes, leftWall, rightWall, ...pegs]);

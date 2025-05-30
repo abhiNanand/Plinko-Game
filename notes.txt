@@ -149,8 +149,8 @@ Or place it somewhere inside your src and import it (if you're using a bundler l
 const collisionSound = new Audio(collisionSoundFile);
 Or use the Web Audio API if you want more control.
  
-      collisionSound.currentTime = 0; // rewind to 0 second
-      collisionSound.play();
+collisionSound.currentTime = 0; // rewind to 0 second
+collisionSound.play();
  
 =======================================
  

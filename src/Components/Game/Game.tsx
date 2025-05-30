@@ -24,6 +24,7 @@ export default function Game() {
   };
 
   const dropBall = () => {
+    audio2.currentTime=0;
     audio2.play();
 
     if (betAmount > totalAmount) {
@@ -33,7 +34,6 @@ export default function Game() {
     }   
     const engine = engineRef.current;
     if (!engine) return;
-    if(betAmount!=0)
     dispatch(ballDropping(true));
     const pegRadius = 8 - (rows - 8) * 0.6;
     const minX = 40 + pegRadius;
@@ -168,6 +168,8 @@ export default function Game() {
           }
           dispatch(ballDropping(false));
           Composite.remove(engine.world, ball);
+
+          audio.currentTime=0;
           audio.play();
         }
       });

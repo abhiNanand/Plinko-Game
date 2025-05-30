@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef,useState } from "react";
 import Matter from "matter-js";
 import { sound } from "../../assets";
 import { useSelector, useDispatch } from "react-redux";
-import { incrementTotalAmount, decrementTotalAmont, ballDropping } from '../../store/index';
+import { TEXT ,points} from "../../Shared/Constants";
+import { incrementTotalAmount, ballDropping, decrementTotalAmount } from '../../store/index';
 import "./Game.css";
 import { toast } from "react-toastify";
 
@@ -15,6 +16,7 @@ export default function Game() {
   const renderRef = useRef<Matter.Render | null>(null);
   const ballCount = useRef<number>(0);
   const dispatch = useDispatch();
+  const [boxLabels,setBoxLabels] = useState<{x:number;multiplier:number}[]>([]);
 
   const audio = new Audio(sound.bonus1);
   const audio2 = new Audio(sound.balldropped);
@@ -34,7 +36,7 @@ export default function Game() {
       return;
     }
     ballCount.current = ballCount.current + 1;
-    dispatch(decrementTotalAmont(betAmount));
+    dispatch(decrementTotalAmount(betAmount));
     dispatch(ballDropping(true));
     const pegRadius = 8 - (rows - 8) * 0.6;
     const minX = 40 + pegRadius;
@@ -96,7 +98,7 @@ export default function Game() {
     const pegRadius = 8 - (rows - 8) * 0.6;
 
     const pegs: Matter.Body[] = [];
-    const boxMultipliers = [1, 1.5, 0.5, 2, 0.2, 1.2, 1.8, 0.4, 0.75];
+    const boxMultipliers = points[rows-8];
 
     for (let r = 0; r < rows; r++) {
       const pegCount = r + 3;
@@ -119,27 +121,31 @@ export default function Game() {
         pegs.push(peg);
       }
     }
-
     const pointBoxes: Matter.Body[] = [];
     let startX = 0;
+
     const boxWidth = 800 / (rows + 1);
+    const labels: {x:number; multiplier: number}[] =[];
 
     for (let i = 0; i < rows + 1; i++) {
-      const multiplier = boxMultipliers[i % boxMultipliers.length];
+      const multiplier = boxMultipliers[i];
+      const centerX =  startX + boxWidth/2;
       const box = Bodies.rectangle(startX + boxWidth / 2, 550, boxWidth, 30, {
         isStatic: true,
         render: {
-          fillStyle: "#b3350e",
+          fillStyle: "#d68d06",
           lineWidth: 4,
         },
         label: `box${i}`,
       });
       (box as any).multiplier = multiplier;
       pointBoxes.push(box);
+      labels.push({x:centerX,multiplier});
       startX += boxWidth;
     }
-    Composite.add(engine.world, [...pointBoxes, leftWall, rightWall, ...pegs]);
-
+    setBoxLabels(labels);
+   Composite.add(engine.world, [...pointBoxes, leftWall, rightWall, ...pegs]);
+ 
     const removedBalls = new Set();
     Events.on(engine, "collisionStart", (event) => {
       event.pairs.forEach((pair) => {
@@ -155,10 +161,10 @@ export default function Game() {
             return;
           removedBalls.add(ball.id);
           const multiplier = (box as any).multiplier;
-          console.log(multiplier, betAmount, multiplier * betAmount);
-          const result: number = parseFloat((betAmount * multiplier).toFixed(2)); 
-          dispatch(incrementTotalAmount(result));
-          ballCount.current = ballCount.current - 1;
+          
+          const result= (betAmount * multiplier).toFixed(2); 
+            dispatch(incrementTotalAmount(Number(result)));  
+           ballCount.current = ballCount.current - 1;
           if (ballCount.current == 0)
             dispatch(ballDropping(false));
           Composite.remove(engine.world, ball);
@@ -187,11 +193,29 @@ export default function Game() {
   }, [rows, betAmount]);
 
   return (
-    <div>
-      <div ref={sceneRef} className="plinko-board" />
+    <div style={{position:"relative"}}>
+      <div ref={sceneRef} className="plinko-board" style={{ width: 800, height: 600 }}/>
+      {boxLabels.map((label,idx)=>(
+        <div
+        key={idx} 
+        className="box-label"
+        style={{
+          position:"absolute",
+          top: "540px",
+          left:`${label.x}px`,
+          transform: "translateX(-50%)",
+          color:"black",
+          
+           fontSize:"14px",
+          pointerEvents:"none",
+          textShadow:"1px 1px 2px black",
+        }}
+        >          {label.multiplier}x
+</div>
+      ))}
       <div className="btn">
         <button className="bet-button" onClick={dropBall}>
-          Drop Ball
+          {TEXT.DROP_BALL}
         </button>
       </div>
     </div>

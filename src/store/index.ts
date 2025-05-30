@@ -27,7 +27,7 @@ const slice = createSlice({
     incrementTotalAmount(state,action:PayloadAction<number>) {
       state.total += action.payload;
     },
-    decrementTotalAmont(state,action:PayloadAction<number>) {
+    decrementTotalAmount(state,action:PayloadAction<number>) {
       state.total -=action.payload;
     },
     ballDropping(state,action:PayloadAction<boolean>){
@@ -36,7 +36,7 @@ const slice = createSlice({
   },
 });
 
-export const {updateRows,incrementTotalAmount,decrementTotalAmont,updateBetAmount,ballDropping} = slice.actions;
+export const {updateRows,incrementTotalAmount,decrementTotalAmount,updateBetAmount,ballDropping} = slice.actions;
 export default slice.reducer;
 
  

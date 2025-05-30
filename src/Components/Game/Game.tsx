@@ -2,38 +2,39 @@ import { useEffect, useRef } from "react";
 import Matter from "matter-js";
 import { sound } from "../../assets";
 import { useSelector, useDispatch } from "react-redux";
-import { incrementTotalAmount, decrementTotalAmont,ballDropping } from '../../store/index';
+import { incrementTotalAmount, decrementTotalAmont, ballDropping } from '../../store/index';
 import "./Game.css";
 import { toast } from "react-toastify";
 
 export default function Game() {
   const rows = useSelector((state: any) => state.game.rows);
-  const isBallDropping=useSelector((state:any)=>state.game.ballDropped);
   const betAmount = useSelector((state: any) => state.game.amount);
   const totalAmount = useSelector((state: any) => state.game.total)
-  const betAmountRef = useRef(betAmount);
   const sceneRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef<Matter.Engine | null>(null);
   const renderRef = useRef<Matter.Render | null>(null);
-   const dispatch = useDispatch();
+  const ballCount = useRef<number>(0);
+  const dispatch = useDispatch();
 
-   const audio=new Audio(sound.bonus1);
-   const audio2=new Audio(sound.balldropped);
+  const audio = new Audio(sound.bonus1);
+  const audio2 = new Audio(sound.balldropped);
   const getRandomInt = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
   };
 
   const dropBall = () => {
-    audio2.currentTime=0;
+    audio2.currentTime = 0;
     audio2.play();
+
+    const engine = engineRef.current;
+    if (!engine) return;
 
     if (betAmount > totalAmount) {
       toast.error("Bet amount higher than total amount");
-      console.log("error")
       return;
-    }   
-    const engine = engineRef.current;
-    if (!engine) return;
+    }
+    ballCount.current = ballCount.current + 1;
+    dispatch(decrementTotalAmont(betAmount));
     dispatch(ballDropping(true));
     const pegRadius = 8 - (rows - 8) * 0.6;
     const minX = 40 + pegRadius;
@@ -57,10 +58,6 @@ export default function Game() {
     });
     Matter.Composite.add(engine.world, ball);
   };
-
-  useEffect(() => {
-    betAmountRef.current = betAmount;
-  }, [betAmount])
 
   useEffect(() => {
     const { Engine, Render, Runner, Composite, Bodies, Events } = Matter;
@@ -158,18 +155,15 @@ export default function Game() {
             return;
           removedBalls.add(ball.id);
           const multiplier = (box as any).multiplier;
-          console.log(multiplier, betAmountRef.current, multiplier * betAmountRef.current);
-          const winAmount = betAmountRef.current * multiplier;
-          if (betAmountRef.current < winAmount) {
-            dispatch(incrementTotalAmount(winAmount - betAmountRef.current));
-          }
-          else if (betAmountRef.current > winAmount) {
-            dispatch(decrementTotalAmont(betAmountRef.current - winAmount));
-          }
-          dispatch(ballDropping(false));
+          console.log(multiplier, betAmount, multiplier * betAmount);
+          const result: number = parseFloat((betAmount * multiplier).toFixed(2)); 
+          dispatch(incrementTotalAmount(result));
+          ballCount.current = ballCount.current - 1;
+          if (ballCount.current == 0)
+            dispatch(ballDropping(false));
           Composite.remove(engine.world, ball);
 
-          audio.currentTime=0;
+          audio.currentTime = 0;
           audio.play();
         }
       });
@@ -190,13 +184,13 @@ export default function Game() {
       }
       render.textures = {};
     };
-  }, [rows]);
+  }, [rows, betAmount]);
 
   return (
     <div>
       <div ref={sceneRef} className="plinko-board" />
       <div className="btn">
-        <button className="bet-button" onClick={dropBall} disabled={isBallDropping}>
+        <button className="bet-button" onClick={dropBall}>
           Drop Ball
         </button>
       </div>

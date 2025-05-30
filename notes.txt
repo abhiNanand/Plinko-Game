@@ -154,4 +154,4 @@ collisionSound.play();
  
 =======================================
  
- 
+const result: number = parseFloat((betAmount * multiplier).toFixed(2)); //toFixed returns string thats why

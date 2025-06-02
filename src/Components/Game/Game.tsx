@@ -194,7 +194,7 @@ export default function Game() {
         if (body.label === "ball" && body.position.y < 400) {
           if (Math.random() < 0.1) {
             const dx = 400 - body.position.x;
-            const biasStrength = 0.000006  ;
+            const biasStrength = 0.000007  ;
             Matter.Body.applyForce(body, body.position, {
               x: dx * biasStrength  ,
               y: 0,

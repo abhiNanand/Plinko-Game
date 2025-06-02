@@ -155,3 +155,7 @@ collisionSound.play();
 =======================================
  
 const result: number = parseFloat((betAmount * multiplier).toFixed(2)); //toFixed returns string thats why
+
+Events.on(engine, "beforeUpdate", () => {
+
+"beforeUpdate": This is the name of the event. It fires just before Matter.js updates the simulation for the next frame.

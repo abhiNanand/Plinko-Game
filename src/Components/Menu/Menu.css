@@ -1,42 +1,41 @@
-.menu-container{
-    color:rgb(237, 242, 239);
+.menu-container {
+  color: rgb(237, 242, 239);
   background-color: rgb(27, 60, 81);
-    display: flex;
-    flex-direction: column;
-    gap:10px;
-    padding: 10px;
-    width: 15vw;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
 }
 
-.amount-input{
-  background-color:rgb(15, 40, 55);
+.amount-input {
+  background-color: rgb(15, 40, 55);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0  10px  0 0;
+  padding: 0 10px 0 0;
 }
-.menu-container input{
-    background-color:rgb(15, 40, 55);
-    color:white;
-   border:none;
-   padding: 10px;
+.menu-container input {
+  background-color: rgb(15, 40, 55);
+  color: white;
+  border: none;
+  padding: 10px;
 }
-.menu-container select{
-    background-color:rgb(15, 40, 55);
-    color:white;
-    padding: 10px;
+.menu-container select {
+  background-color: rgb(15, 40, 55);
+  color: white;
+  padding: 10px;
 }
-input:focus{
+input:focus {
   outline: none;
 }
-  
-select:focus{
-    outline:none;
+
+select:focus {
+  outline: none;
 }
 
 input:disabled {
   cursor: not-allowed;
-}  
-select:disabled{
-  cursor:not-allowed;
+}
+select:disabled {
+  cursor: not-allowed;
 }

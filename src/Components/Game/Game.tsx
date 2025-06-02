@@ -1,4 +1,3 @@
-
 import { useEffect, useRef,useState } from "react";
 import Matter from "matter-js";
 import { sound } from "../../assets";
@@ -50,16 +49,18 @@ export default function Game() {
     const startat = Math.max(minX, Math.min(maxX, x));
     x = startX + 2 * spacingX;
     const endat = Math.max(minX, Math.min(maxX, x));
-    const n = getRandomInt(startat, endat);
-    const ballRadius = 14 - (rows - 8) * 0.4;
 
-    const ball = Matter.Bodies.circle(n, 0, ballRadius, {
-      restitution: 0.4,
-      friction: 0,
+
+    const n = getRandomInt(startat, endat);
+    const ballRadius = 14 - (rows - 8) * 0.5;
+
+    const ball = Matter.Bodies.circle(n, 10, ballRadius, {
+      restitution: 0.6,
+      friction: 0.4,
       render: { fillStyle: "#c95555" },
       label: "ball",
     });
-    Matter.Composite.add(engine.world, ball);
+    Matter.Composite.add(engine.world,ball);
   };
 
   useEffect(() => {
@@ -116,20 +117,18 @@ export default function Game() {
 
         const peg = Bodies.circle(x, y, pegRadius, {
           isStatic: true,
-          friction: 0,
+          friction: 0.4,
           render: { fillStyle: "white" },
         });
         pegs.push(peg);
       }
     }
 
-
-
-    const leftWall = Bodies.rectangle(startpat-30, 300, 40, 600, {
+    const leftWall = Bodies.rectangle(startpat-20-pegRadius, 300, 40, 600, {
       isStatic: true,
       render: { fillStyle: "#0E212E" },
     });
-    const rightWall = Bodies.rectangle(endpat+30, 300, 40, 600, {
+    const rightWall = Bodies.rectangle(endpat+20, 300, 40, 600, {
       isStatic: true,
       render: { fillStyle: "#0E212E" },
     });
@@ -137,7 +136,7 @@ export default function Game() {
      const pointBoxes: Matter.Body[] = [];
     const labels: {x: number; multiplier: number}[] = [];
     
-     const totalAvailableWidth = endpat - startpat;
+     const totalAvailableWidth = endpat - startpat-pegRadius;
     
      const gapSize = pegRadius;
     
@@ -216,9 +215,9 @@ export default function Game() {
   return (
     <div style={{position:"relative"}}>
       <div ref={sceneRef} className="plinko-board" style={{ width: 800, height: 600 }}/>
-      {boxLabels.map((label,idx)=>(
+      {boxLabels.map((label)=>(
         <div
-        key={idx} 
+        key={`pointBox`} 
         className="box-label"
         style={{
           position:"absolute",
@@ -242,3 +241,5 @@ export default function Game() {
     </div>
   );
 }
+
+ 

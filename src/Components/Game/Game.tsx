@@ -11,6 +11,8 @@ export default function Game() {
   const rows = useSelector((state: any) => state.game.rows);
   const betAmount = useSelector((state: any) => state.game.amount);
   const totalAmount = useSelector((state: any) => state.game.total);
+  const pointsIndex = useSelector((state:any)=>state.game.pointsIndex);
+  console.log(pointsIndex);
   const sceneRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef<Matter.Engine | null>(null);
   const renderRef = useRef<Matter.Render | null>(null);
@@ -199,16 +201,15 @@ export default function Game() {
 
     Events.on(engine, "beforeUpdate", () => {
       Matter.Composite.allBodies(engine.world).forEach((body) => {
-        if (body.label === "ball" && body.position.y < 300) {
-          if (Math.random() < 0.1) {
+        if (body.label === "ball" ) {
+          
             const dx = 400 - body.position.x;
             const biasStrength = 0.000007;
             Matter.Body.applyForce(body, body.position, {
               x: dx * biasStrength,
-
               y: 0,
             });
-          }
+          
         }
       }); 
     });
@@ -252,3 +253,4 @@ export default function Game() {
     </div>
   );
 }
+ 

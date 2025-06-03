@@ -5,6 +5,7 @@ interface Values {
   amount: number;
   rows: number;
   ballDropped: boolean;
+  pointsIndex:number;
 }
 
 const initialState: Values = {
@@ -12,6 +13,7 @@ const initialState: Values = {
   amount: 0,
   rows: 8,
   ballDropped:false,
+  pointsIndex: -1,
 };
 
 const slice = createSlice({
@@ -33,10 +35,13 @@ const slice = createSlice({
     ballDropping(state,action:PayloadAction<boolean>){
       state.ballDropped=action.payload;
     },
+    updatePointsIndex(state,action:PayloadAction<number>){
+      state.pointsIndex = action.payload;
+    },
   },
 });
 
-export const {updateRows,incrementTotalAmount,decrementTotalAmount,updateBetAmount,ballDropping} = slice.actions;
+export const {updateRows,incrementTotalAmount,decrementTotalAmount,updateBetAmount,ballDropping, updatePointsIndex} = slice.actions;
 export default slice.reducer;
 
  

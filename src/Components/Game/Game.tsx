@@ -1,4 +1,4 @@
- import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Matter from "matter-js";
 import { sound } from "../../assets";
 import { useSelector, useDispatch } from "react-redux";
@@ -51,7 +51,7 @@ export default function Game() {
 
 
     const n = getRandomInt(startat, endat);
-    const ballRadius = 14 - (rows - 8) * 0.5;
+    const ballRadius = 14 - (rows - 8) * 0.6;
 
     const ball = Matter.Bodies.circle(n, 10, ballRadius, {
       restitution: 0.6,
@@ -141,10 +141,18 @@ export default function Game() {
       const multiplier = boxMultipliers[i];
       const centerX = currentX + boxWidth / 2;
 
+
+      let fillColor = "#d68d06";
+      if (multiplier >= 5) fillColor = "#d32f2f";
+      else if (multiplier >= 2) fillColor = "#f44336";
+      else if (multiplier > 1) fillColor = "#fb8c00";
+      else if (multiplier === 1) fillColor = "#fdd835";
+      else if (multiplier < 1) fillColor = "#fbc02d";
+
       const box = Bodies.rectangle(centerX, 550, boxWidth, 30, {
         isStatic: true,
         render: {
-          fillStyle: "#d68d06",
+          fillStyle: fillColor,
           lineWidth: 4,
         },
         label: `box${i}`,
@@ -191,17 +199,18 @@ export default function Game() {
 
     Events.on(engine, "beforeUpdate", () => {
       Matter.Composite.allBodies(engine.world).forEach((body) => {
-        if (body.label === "ball" && body.position.y < 400) {
+        if (body.label === "ball" && body.position.y < 300) {
           if (Math.random() < 0.1) {
             const dx = 400 - body.position.x;
-            const biasStrength = 0.000007  ;
+            const biasStrength = 0.000007;
             Matter.Body.applyForce(body, body.position, {
-              x: dx * biasStrength  ,
+              x: dx * biasStrength,
+
               y: 0,
             });
           }
         }
-      });
+      }); 
     });
 
     Render.run(render);
@@ -226,17 +235,10 @@ export default function Game() {
       <div ref={sceneRef} className="plinko-board" style={{ width: 800, height: 600 }} />
       {boxLabels.map((label) => (
         <div
-        key={`pointBox${label.x}`}
-        className="box-label"
+          key={`pointBox${label.x}`}
+          className="box-label"
           style={{
-            position: "absolute",
-            top: "540px",
             left: `${label.x}px`,
-            transform: "translateX(-50%)",
-            color: "black",
-            fontSize: "14px",
-            pointerEvents: "none",
-            textShadow: "1px 1px 2px black",
           }}
         >
           {label.multiplier}x

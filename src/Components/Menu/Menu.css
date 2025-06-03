@@ -24,6 +24,8 @@
   background-color: rgb(15, 40, 55);
   color: white;
   padding: 10px;
+  border: none;
+  cursor: pointer;
 }
 input:focus {
   outline: none;
@@ -38,4 +40,5 @@ input:disabled {
 }
 select:disabled {
   cursor: not-allowed;
+  opacity: 1;
 }

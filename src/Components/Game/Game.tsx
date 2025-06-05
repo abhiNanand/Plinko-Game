@@ -55,9 +55,9 @@
 //     const endat = Math.max(minX, Math.min(maxX, x));
 
 
- 
+
 //     const ballRadius = 14 - (rows - 8) * 0.6;
- 
+
 // for(let i=startat;i<=endat;i++)
 // {
 //   ballPositionRef.current=i;
@@ -162,7 +162,7 @@
 //       const multiplier = boxMultipliers[i];
 //       const centerX = currentX + boxWidth / 2;
 
-      
+
 //       if(pointsIndex === i)
 //       pointsRef.current = centerX;
 
@@ -235,14 +235,14 @@
 //     Events.on(engine, "beforeUpdate", () => {
 //       Matter.Composite.allBodies(engine.world).forEach((body) => {
 //         if (rows>=14   && body.label === "ball" && body.position.y>50 ) {
-           
+
 //             const dx =  pointsRef.current - body.position.x;
 //             const biasStrength = 0.00000025;
 //             Matter.Body.applyForce(body, body.position, {
 //               x: dx * biasStrength,
 //               y: 0,
 //             });
-          
+
 //         }
 //       }); 
 //     });
@@ -289,268 +289,268 @@
 
 //
 
-// import { useEffect, useRef, useState } from "react";
-// import Matter from "matter-js";
-// import { sound } from "../../assets";
-// import { useSelector, useDispatch } from "react-redux";
-// import { TEXT, points, collisionData, getRandomIndex, allowed  } from "../../Shared/Constants";
-// import { incrementTotalAmount, ballDropping, decrementTotalAmount } from "../../store/index";
-// import "./Game.css";
-// import { toast } from "react-toastify";
+import { useEffect, useRef, useState } from "react";
+import Matter from "matter-js";
+import { sound } from "../../assets";
+import { useSelector, useDispatch } from "react-redux";
+import { TEXT, points, collisionData, getRandomIndex, allowed } from "../../Shared/Constants";
+import { incrementTotalAmount, ballDropping, decrementTotalAmount } from "../../store/index";
+import "./Game.css";
+import { toast } from "react-toastify";
 
-// export default function Game() {
-//   const rows = useSelector((state: any) => state.game.rows);
-//   const betAmount = useSelector((state: any) => state.game.amount);
-//   const totalAmount = useSelector((state: any) => state.game.total);
-//   const pointsIndex = useSelector((state:any)=>state.game.pointsIndex);
-//   const pointsRef = useRef<number>(400);
-//   const sceneRef = useRef<HTMLDivElement>(null);
-//   const engineRef = useRef<Matter.Engine | null>(null);
-//   const renderRef = useRef<Matter.Render | null>(null);
-//   const ballCount = useRef<number>(0);
-//   const [disableBtn, setDisableBtn] = useState<boolean>(false);
-//   const dispatch = useDispatch();
-//   const [boxLabels, setBoxLabels] = useState<{ x: number; multiplier: number }[]>([]);
-
- 
-//   const audio = new Audio(sound.bonus1);
-//   const audio2 = new Audio(sound.balldropped);
-
-//   const dropBall = () => {
-//     audio2.currentTime = 0;
-//     audio2.play();
-
-//     const engine = engineRef.current;
-//     if (!engine) return;
-//     if (betAmount > totalAmount) {
-//       toast.error("Bet amount higher than total amount");
-//       return;
-//     }
-//     ballCount.current = ballCount.current + 1;
-//     dispatch(decrementTotalAmount(betAmount));
-//     dispatch(ballDropping(true));
-    
-//     let index=pointsIndex;
-//     if(pointsIndex==-1)
-//       index=rows/2;
-//     const coordinates = collisionData[rows-8][index];
-
-// console.log(coordinates)
- 
-//     const ballRadius = 14 - (rows - 8) * 0.6;
- 
-//    const i =getRandomIndex(0,coordinates.length-1);
-//    console.log(i);
-//    const ball = Matter.Bodies.circle(coordinates[i], 10, ballRadius, {
-//     restitution: 0.7,
-//     friction: 1,
-//     render: { 
-//       fillStyle: "#c95555",
-//       strokeStyle:'black',
-//       lineWidth: 3,
-//    },
-//     collisionFilter: {
-//       group:-1,
-//     },
-//     label: "ball",
-//   });
-//   Matter.Composite.add(engine.world, ball);
+export default function Game() {
+  const rows = useSelector((state: any) => state.game.rows);
+  const betAmount = useSelector((state: any) => state.game.amount);
+  const totalAmount = useSelector((state: any) => state.game.total);
+  const pointsIndex = useSelector((state: any) => state.game.pointsIndex);
+  const pointsRef = useRef<number>(400);
+  const sceneRef = useRef<HTMLDivElement>(null);
+  const engineRef = useRef<Matter.Engine | null>(null);
+  const renderRef = useRef<Matter.Render | null>(null);
+  const ballCount = useRef<number>(0);
+  const [disableBtn, setDisableBtn] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const [boxLabels, setBoxLabels] = useState<{ x: number; multiplier: number }[]>([]);
 
 
-//   };
+  const audio = new Audio(sound.bonus1);
+  const audio2 = new Audio(sound.balldropped);
+
+  const dropBall = () => {
+    audio2.currentTime = 0;
+    audio2.play();
+
+    const engine = engineRef.current;
+    if (!engine) return;
+    if (betAmount > totalAmount) {
+      toast.error("Bet amount higher than total amount");
+      return;
+    }
+    ballCount.current = ballCount.current + 1;
+    dispatch(decrementTotalAmount(betAmount));
+    dispatch(ballDropping(true));
+
+    let index = pointsIndex;
+    if (pointsIndex == -1) {
+      index = Math.round(rows / 2);
+      console.log(index)
+    }
+
+    const coordinates = collisionData[rows - 8][index];
+    const ballRadius = 14 - (rows - 8) * 0.6;
+
+    const i = getRandomIndex(0, coordinates.length - 1);
+    console.log(i);
+    const ball = Matter.Bodies.circle(coordinates[i], 10, ballRadius, {
+      restitution: 0.7,
+      friction: 1,
+      render: {
+        fillStyle: "#c95555",
+        strokeStyle: 'black',
+        lineWidth: 3,
+      },
+      collisionFilter: {
+        group: -1,
+      },
+      label: "ball",
+    });
+    Matter.Composite.add(engine.world, ball);
 
 
-//   useEffect(() => {
-//     const { Engine, Render, Runner, Composite, Bodies, Events } = Matter;
-//     const engine = Engine.create();
-//     engineRef.current = engine;
+  };
 
-//     const render = Render.create({
-//       element: sceneRef.current!,
-//       engine,
-//       options: {
-//         width: 800,
-//         height: 600,
-//         wireframes: false,
-//         background: "transparent",
-//       },
-//     });
-//     renderRef.current = render;
 
-//     const canvasHeight = 600;
-//     const reservedBottomSpace = 120;
-//     const availableHeight = canvasHeight - reservedBottomSpace;
-//     const spacingY = Math.min(80, availableHeight / rows);
+  useEffect(() => {
+    const { Engine, Render, Runner, Composite, Bodies, Events } = Matter;
+    const engine = Engine.create();
+    engineRef.current = engine;
 
-//     const availableWidth = 800 - 80;
-//     const spacingX = Math.max(30, Math.min(70, availableWidth / (rows + 2)));
-//     const pegRadius = 8 - (rows - 8) * 0.6;
+    const render = Render.create({
+      element: sceneRef.current!,
+      engine,
+      options: {
+        width: 800,
+        height: 600,
+        wireframes: false,
+        background: "transparent",
+      },
+    });
+    renderRef.current = render;
 
-//     const pegs: Matter.Body[] = [];
-//     const boxMultipliers = points[rows - 8];
+    const canvasHeight = 600;
+    const reservedBottomSpace = 120;
+    const availableHeight = canvasHeight - reservedBottomSpace;
+    const spacingY = Math.min(80, availableHeight / rows);
 
-//     let startpat = 0;
-//     let endpat = 0;
+    const availableWidth = 800 - 80;
+    const spacingX = Math.max(30, Math.min(70, availableWidth / (rows + 2)));
+    const pegRadius = 8 - (rows - 8) * 0.6;
 
-//     for (let r = 0; r < rows; r++) {
-//       const pegCount = r + 3;
-//       const totalWidth = (pegCount - 1) * spacingX;
-//       const startX = (800 - totalWidth) / 2;
+    const pegs: Matter.Body[] = [];
+    const boxMultipliers = points[rows - 8];
 
-//       const minX = 40 + pegRadius;
-//       const maxX = 760 - pegRadius;
+    let startpat = 0;
+    let endpat = 0;
 
-//       for (let col = 0; col < pegCount; col++) {
-//         let x = startX + col * spacingX;
-//         x = Math.max(minX, Math.min(maxX, x));
-//         const y = 60 + r * spacingY;
+    for (let r = 0; r < rows; r++) {
+      const pegCount = r + 3;
+      const totalWidth = (pegCount - 1) * spacingX;
+      const startX = (800 - totalWidth) / 2;
 
-//         if (r + 1 === rows && col === 0) startpat = x;
-//         if (r + 1 === rows && col + 1 === pegCount) endpat = x + pegRadius;
+      const minX = 40 + pegRadius;
+      const maxX = 760 - pegRadius;
 
-//         const peg = Bodies.circle(x, y, pegRadius, {
-//           isStatic: true,
-//           friction: 0.4,
-//           render: { fillStyle: "white" },
-//         });
-//         pegs.push(peg);
-//       }
-//     }
+      for (let col = 0; col < pegCount; col++) {
+        let x = startX + col * spacingX;
+        x = Math.max(minX, Math.min(maxX, x));
+        const y = 60 + r * spacingY;
 
-//     const leftWall = Bodies.rectangle(startpat - 20 - pegRadius, 300, 40, 600, {
-//       isStatic: true,
-//       render: { fillStyle: "#0E212E" },
-//     });
-//     const rightWall = Bodies.rectangle(endpat + 20, 300, 40, 600, {
-//       isStatic: true,
-//       render: { fillStyle: "#0E212E" },
-//     });
+        if (r + 1 === rows && col === 0) startpat = x;
+        if (r + 1 === rows && col + 1 === pegCount) endpat = x + pegRadius;
 
-//     const pointBoxes: Matter.Body[] = [];
-//     const labels: { x: number; multiplier: number }[] = [];
+        const peg = Bodies.circle(x, y, pegRadius, {
+          isStatic: true,
+          friction: 0.4,
+          render: { fillStyle: "white" },
+        });
+        pegs.push(peg);
+      }
+    }
 
-//     const totalAvailableWidth = endpat - startpat - pegRadius;
-//     const gapSize = pegRadius;
-//     const boxWidth = (totalAvailableWidth - gapSize * rows) / (rows + 1);
+    const leftWall = Bodies.rectangle(startpat - 20 - pegRadius, 300, 40, 600, {
+      isStatic: true,
+      render: { fillStyle: "#0E212E" },
+    });
+    const rightWall = Bodies.rectangle(endpat + 20, 300, 40, 600, {
+      isStatic: true,
+      render: { fillStyle: "#0E212E" },
+    });
 
-//     if(pointsIndex === -1)
-//       pointsRef.current = 400;
+    const pointBoxes: Matter.Body[] = [];
+    const labels: { x: number; multiplier: number }[] = [];
 
-//     let currentX = startpat;
-//     for (let i = 0; i < rows + 1; i++) {
-//       const multiplier = boxMultipliers[i];
-//       const centerX = currentX + boxWidth / 2;
+    const totalAvailableWidth = endpat - startpat - pegRadius;
+    const gapSize = pegRadius;
+    const boxWidth = (totalAvailableWidth - gapSize * rows) / (rows + 1);
 
-      
-//       if(pointsIndex === i)
-//       pointsRef.current = centerX;
+    if (pointsIndex === -1)
+      pointsRef.current = 400;
 
-//       let fillColor = "#d68d06";
-//       if (multiplier >= 5) fillColor = "#d32f2f";
-//       else if (multiplier >= 2) fillColor = "#f44336";
-//       else if (multiplier > 1) fillColor = "#fb8c00";
-//       else if (multiplier === 1) fillColor = "#fdd835";
-//       else if (multiplier < 1) fillColor = "#fbc02d";
+    let currentX = startpat;
+    for (let i = 0; i < rows + 1; i++) {
+      const multiplier = boxMultipliers[i];
+      const centerX = currentX + boxWidth / 2;
 
-//       const box = Bodies.rectangle(centerX, 550, boxWidth, 30, {
-//         isStatic: true,
-//         render: {
-//           fillStyle: fillColor,
-//           lineWidth: 4,
-//         },
-//         label: `box${i}`,
-//       });
 
-//       (box as any).multiplier = multiplier;
-//       pointBoxes.push(box);
-//       labels.push({ x: centerX, multiplier });
+      if (pointsIndex === i)
+        pointsRef.current = centerX;
 
-//       currentX += boxWidth + gapSize;
-//     }
-//     setBoxLabels(labels);
+      let fillColor = "#d68d06";
+      if (multiplier >= 5) fillColor = "#d32f2f";
+      else if (multiplier >= 2) fillColor = "#f44336";
+      else if (multiplier > 1) fillColor = "#fb8c00";
+      else if (multiplier === 1) fillColor = "#fdd835";
+      else if (multiplier < 1) fillColor = "#fbc02d";
 
-//     Composite.add(engine.world, [...pointBoxes, leftWall, rightWall, ...pegs]);
+      const box = Bodies.rectangle(centerX, 550, boxWidth, 30, {
+        isStatic: true,
+        render: {
+          fillStyle: fillColor,
+          lineWidth: 4,
+        },
+        label: `box${i}`,
+      });
 
-//     const removedBalls = new Set();
-//     Events.on(engine, "collisionStart", (event) => {
-//       event.pairs.forEach((pair) => {
-//         const [bodyA, bodyB] = [pair.bodyA, pair.bodyB];
-//         const isBallA = bodyA.label === "ball";
-//         const isBallB = bodyB.label === "ball";
-//         const isBoxA = bodyA.label.startsWith("box");
-//         const isBoxB = bodyB.label.startsWith("box");
+      (box as any).multiplier = multiplier;
+      pointBoxes.push(box);
+      labels.push({ x: centerX, multiplier });
 
-//         if ((isBallA && isBoxB) || (isBallB && isBoxA)) {
-//           const ball = isBallA ? bodyA : bodyB;
-//           const box = isBoxA ? bodyA : bodyB;
+      currentX += boxWidth + gapSize;
+    }
+    setBoxLabels(labels);
 
-//           if (removedBalls.has(ball.id)) return;
-//           removedBalls.add(ball.id);
+    Composite.add(engine.world, [...pointBoxes, leftWall, rightWall, ...pegs]);
 
-//           const multiplier = (box as any).multiplier;
-//           const result = (betAmount * multiplier).toFixed(2);
-//           dispatch(incrementTotalAmount(Number(result)));
-//           ballCount.current -= 1;
-//           if (ballCount.current === 0) dispatch(ballDropping(false));
-//           Composite.remove(engine.world, ball);
+    const removedBalls = new Set();
+    Events.on(engine, "collisionStart", (event) => {
+      event.pairs.forEach((pair) => {
+        const [bodyA, bodyB] = [pair.bodyA, pair.bodyB];
+        const isBallA = bodyA.label === "ball";
+        const isBallB = bodyB.label === "ball";
+        const isBoxA = bodyA.label.startsWith("box");
+        const isBoxB = bodyB.label.startsWith("box");
 
-//           audio.currentTime = 0;
-//           audio.play();
-//         }
-//       });
-//     });
+        if ((isBallA && isBoxB) || (isBallB && isBoxA)) {
+          const ball = isBallA ? bodyA : bodyB;
+          const box = isBoxA ? bodyA : bodyB;
 
-//     Events.on(engine, "beforeUpdate", () => {
-//       Matter.Composite.allBodies(engine.world).forEach((body) => {
- 
-//         if ( allowed(rows,pointsIndex)&& body.label === "ball" && body.position.y>50 ) {
-//             const dx =  pointsRef.current - body.position.x;
-//             const biasStrength = 0.00000025;
-//             Matter.Body.applyForce(body, body.position, {
-//               x: dx * biasStrength,
-//               y: 0,
-//             });
-          
-//         }
-//       }); 
-//     });
+          if (removedBalls.has(ball.id)) return;
+          removedBalls.add(ball.id);
 
-//     Render.run(render);
-//     const runner = Runner.create();
-//     Runner.run(runner, engine);
-//     (engineRef.current as any).runner = runner;
+          const multiplier = (box as any).multiplier;
+          const result = (betAmount * multiplier).toFixed(2);
+          dispatch(incrementTotalAmount(Number(result)));
+          ballCount.current -= 1;
+          if (ballCount.current === 0) dispatch(ballDropping(false));
+          Composite.remove(engine.world, ball);
 
-//     return () => {
-//       Render.stop(render);
-//       Runner.stop(runner);
-//       Composite.clear(engine.world, false);
-//       Engine.clear(engine);
-//       if (render.canvas.parentNode) {
-//         render.canvas.parentNode.removeChild(render.canvas);
-//       }
-//       render.textures = {};
-//     };
-//   }, [rows, betAmount, pointsIndex]);
+          audio.currentTime = 0;
+          audio.play();
+        }
+      });
+    });
 
-//   return (
-//     <div style={{ position: "relative" }}>
-//       <div ref={sceneRef} className="plinko-board" style={{ width: 800, height: 600 }} />
-//       {boxLabels.map((label) => (
-//         <div
-//           key={`pointBox${label.x}`}
-//           className="box-label"
-//           style={{
-//             left: `${label.x}px`,
-//           }}
-//         >
-//           {label.multiplier}x
-//         </div>
-//       ))}
-//       <div className="btn">
-//         <button className="bet-button" disabled={disableBtn} onClick={()=>{dropBall();setDisableBtn(true);setTimeout(()=>setDisableBtn(false),500)}}>
-//           {TEXT.DROP_BALL}
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
+    Events.on(engine, "beforeUpdate", () => {
+      Matter.Composite.allBodies(engine.world).forEach((body) => {
+
+        if (allowed(rows, pointsIndex) && body.label === "ball" && body.position.y > 50) {
+          const dx = pointsRef.current - body.position.x;
+          const biasStrength = 0.00000025;
+          Matter.Body.applyForce(body, body.position, {
+            x: dx * biasStrength,
+            y: 0,
+          });
+
+        }
+      });
+    });
+
+    Render.run(render);
+    const runner = Runner.create();
+    Runner.run(runner, engine);
+    (engineRef.current as any).runner = runner;
+
+    return () => {
+      Render.stop(render);
+      Runner.stop(runner);
+      Composite.clear(engine.world, false);
+      Engine.clear(engine);
+      if (render.canvas.parentNode) {
+        render.canvas.parentNode.removeChild(render.canvas);
+      }
+      render.textures = {};
+    };
+  }, [rows, betAmount, pointsIndex]);
+
+  return (
+    <div style={{ position: "relative" }}>
+      <div ref={sceneRef} className="plinko-board" style={{ width: 800, height: 600 }} />
+      {boxLabels.map((label) => (
+        <div
+          key={`pointBox${label.x}`}
+          className="box-label"
+          style={{
+            left: `${label.x}px`,
+          }}
+        >
+          {label.multiplier}x
+        </div>
+      ))}
+      <div className="btn">
+        <button className="bet-button" disabled={disableBtn} onClick={() => { dropBall(); setDisableBtn(true); setTimeout(() => setDisableBtn(false), 500) }}>
+          {TEXT.DROP_BALL}
+        </button>
+      </div>
+    </div>
+  );
+}

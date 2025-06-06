@@ -2,7 +2,7 @@
 // import Matter from "matter-js";
 // import { sound } from "../../assets";
 // import { useSelector, useDispatch } from "react-redux";
-// import { TEXT, points, collisionData  } from "../../Shared/Constants";
+// import { TEXT, points, collisionData, allowed  } from "../../Shared/Constants";
 // import { incrementTotalAmount, ballDropping, decrementTotalAmount } from "../../store/index";
 // import "./Game.css";
 // import { toast } from "react-toastify";
@@ -23,7 +23,7 @@
 
 //   //
 //   const ballPositionRef = useRef<number>(0);
-//   const map=new Map();
+//   const map=new Map();  
 
 //   const audio = new Audio(sound.bonus1);
 //   const audio2 = new Audio(sound.balldropped);
@@ -234,10 +234,12 @@
 
 //     Events.on(engine, "beforeUpdate", () => {
 //       Matter.Composite.allBodies(engine.world).forEach((body) => {
-//         if (rows>=14   && body.label === "ball" && body.position.y>50 ) {
+//         if (allowed(rows,pointsIndex)   && body.label === "ball" && body.position.y>50 ) {
 
 //             const dx =  pointsRef.current - body.position.x;
-//             const biasStrength = 0.00000025;
+//             let biasStrength = 0.00000025;
+//             if(rows==14 && (pointsIndex==0 || pointsIndex=== 14))
+//               biasStrength = 0.00000019;
 //             Matter.Body.applyForce(body, body.position, {
 //               x: dx * biasStrength,
 //               y: 0,
@@ -287,7 +289,7 @@
 //   );
 // }
 
-//
+
 
 import { useEffect, useRef, useState } from "react";
 import Matter from "matter-js";
@@ -337,6 +339,7 @@ export default function Game() {
     }
 
     const coordinates = collisionData[rows - 8][index];
+    console.log(coordinates)
     const ballRadius = 14 - (rows - 8) * 0.6;
 
     const i = getRandomIndex(0, coordinates.length - 1);
@@ -505,7 +508,9 @@ export default function Game() {
 
         if (allowed(rows, pointsIndex) && body.label === "ball" && body.position.y > 50) {
           const dx = pointsRef.current - body.position.x;
-          const biasStrength = 0.00000025;
+          let biasStrength = 0.00000025;
+          if (rows == 14 && (pointsIndex == 0 || pointsIndex == 14))
+            biasStrength = 0.00000019;
           Matter.Body.applyForce(body, body.position, {
             x: dx * biasStrength,
             y: 0,
